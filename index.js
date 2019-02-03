@@ -4,13 +4,21 @@ var express = require('express');
     port = process.env.PORT || 3000;// check if the port is working or not
     bodyParser = require('body-parser');
     morgan = require('morgan');//for displaying errors
-    
+    jwt = require('jsonwebtoken');
+    path = require('path');
+    fileUpload = require('express-fileupload');
+
+
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(morgan('dev'));//call morgan for development purposes only
+//call morgan for development purposes only
+app.use(morgan('dev'));
+
+//middleware for file upload
+app.use(fileUpload());
 
 //CORS
 // Add headers
@@ -36,17 +44,15 @@ app.use(function (req, res, next){
 // server static files
 app.use(express.static('public'));
 
-// Bundle the API routes.
-var router = express.Router();
 
 app.use('/api', require('./routes'));
+
 
 // start the server
 app.listen(port, function(){
     console.log(`The API has started on http://127.0.0.1:${port}/!`);
 });
 
-module.exports = router;
 
 
 
